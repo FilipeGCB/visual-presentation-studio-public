@@ -1,152 +1,83 @@
 # Visual Presentation Studio
 
-Visual Presentation Studio is a portable, local-first factory for designing, building, visually inspecting, and validating high-quality HTML presentations.
+**Active development.** Visual Presentation Studio is a local-first engineering system for designing, building, rendering, inspecting, and validating high-quality HTML presentations and visual narratives with AI-assisted workflows.
 
-It treats presentation work as an engineering process: thesis, narrative, visual direction, assets, technical routing, rendered inspection, QA, and human approval are explicit parts of the workflow.
+This repository is the curated public distribution of an actively developed private laboratory. It contains reusable capability, not private presentation deliverables or raw project evidence.
 
-This public repository is a curated portfolio/study distribution. The operational learning laboratory is private; this repository contains only reusable capability, synthetic examples, intentionally public material, and sanitized/generalized learning.
+## Why it exists
 
-## Why this exists
+A strong visual artifact is not just a model output. The Studio treats thesis, narrative, visual direction, assets, technical architecture, browser rendering, inspection, correction, and multidimensional QA as an engineering lifecycle.
 
-A one-shot "generate some slides" workflow is often fast, but it tends to collapse several distinct problems into a single model call:
+The central principle is simple:
 
-- What is the actual thesis?
-- What should the audience understand or decide?
-- Which visual direction fits the message?
-- Which assets need to exist before build?
-- Which presentation mode is appropriate?
-- How should the artifact be inspected after rendering?
-- What evidence is required before calling the result ready?
-
-Visual Presentation Studio separates those concerns and turns them into a repeatable production workflow.
-
-## What it demonstrates
-
-The Studio currently includes:
-
-- a central orchestration Skill;
-- Gate 1 and Gate 2 human-approval contracts;
-- traditional 16:9, scrollytelling, and exploratory/interactive modes;
-- reusable workspace contracts;
-- visual-research and asset-planning methodology;
-- browser-rendered inspection guidance;
-- multidimensional QA across content, narrative, visual, experience, and technical surfaces;
-- standalone HTML starters and a React/Vite exploratory starter;
-- patterns and anti-patterns learned from real use and promoted only after generalization and sanitization.
+> Complexity may vary. Production rigor does not.
 
 ## Two-gate lifecycle
 
-```text
-brief
-  ↓
-thesis + narrative + visual/technical proposal
-  ↓
-GATE 1 — approve the creative contract
-  ↓
-storyboard + assets + build
-  ↓
-render → inspect → correct → render again
-  ↓
-content + narrative + visual + experience + technical QA
-  ↓
-READY FOR USER REVIEW
-  ↓
-GATE 2 — approve the exact working version
-  ↓
-FINAL
-  ↓
-optional learning harvest
-```
+`brief → proposal → Gate 1 → storyboard/specs → build → render/inspect/correct → QA → Gate 2 → FINAL → optional controlled learning`
 
-Gate 1 is intentionally consolidated. It freezes the major structural decisions before implementation rather than interrupting the work with dozens of micro-approvals.
+- **Gate 1** freezes thesis, primary narrative, format, visual direction, primary interaction, stack, and destination before implementation.
+- **Gate 2** approves the exact finished build only after rendered inspection and quality gates have no known BLOCKER or MAJOR issues.
 
-Gate 2 validates the exact build/commit and its evidence before it is called final.
+## Supported experiences
 
-## Presentation modes
+- Traditional / 16:9 presentations
+- Scrollytelling and editorial narratives
+- Exploratory / interactive experiences
+- Deliberate hybrids when they improve comprehension
 
-### Traditional / 16:9
+Local downloadable delivery is a first-class output. HTML/CSS/JavaScript is preferred when sufficient; React is used when meaningful state or interaction warrants it.
 
-Best when the artifact behaves like a conventional slide deck and the audience advances screen by screen.
+## Quality system
 
-### Scrollytelling
+The Studio separates build success from visual evidence. Its workflow requires the actual result to be rendered and inspected at relevant states and viewports, then corrected and rendered again.
 
-Best when progression, section transitions, sticky behavior, motion, or a continuous narrative are part of the experience.
-
-### Exploratory / Interactive
-
-Best when the audience needs to inspect states, compare views, filter information, or interact with the artifact instead of consuming a fixed sequence.
-
-The mode follows the narrative. A visual component or framework must not choose the architecture by itself.
-
-## Rendered inspection
-
-A successful build is not visual QA.
-
-The Studio requires the actual rendered artifact to be inspected and corrected through the loop:
-
-```text
-RENDER → INSPECT → IDENTIFY ISSUES → CORRECT → RENDER AGAIN
-```
-
-Before `READY FOR USER REVIEW`, there must be:
-
-- 0 known BLOCKER issues;
-- 0 known MAJOR issues.
-
-Source review, a previous render, or a static composite cannot be silently treated as current live evidence.
+Quality is evaluated across content, narrative, visual, experience, and technical surfaces. Evidence records the exact build, route, viewport, input, settled state, and known limitations so reviewability does not depend on vague claims.
 
 ## Current trade-off
 
-The current pipeline is optimized for visual quality, reproducibility and reviewability rather than minimum latency or token cost. This produces strong final artifacts, but can be expensive and slow for exploratory work.
+The current production-quality route is optimized for **visual quality, reproducibility, and reviewability rather than minimum latency or token cost**. That discipline can produce highly consistent final artifacts, but it can also be slower and more expensive than lightweight generation during exploratory work.
 
-A future optimization track will investigate a faster draft path without weakening the production-quality route. That route is not claimed as implemented here today.
+A future research track may investigate a faster draft path while preserving the current production-quality route. A Fast/Draft mode is not presented here as an existing capability.
 
-## Repository structure
+## What is public here
 
-```text
-skill/          central installable Studio capability
-methodology/    presentation contracts and reasoning methods
-quality/        QA surfaces, severities, and integrity rules
-patterns/       reusable anti-patterns and learned heuristics
-templates/      workspace and HTML/React starters
-examples/       synthetic acceptance example
-scripts/        structural validation and public-safety scan
-tests/          public repository contract tests
-docs/           design, implementation, verification, and sanitized learning records
-```
+This distribution is intentionally smaller and safer than the private laboratory. It contains reusable methodology, the operational Skill, templates, patterns, quality rules, generic examples, and sanitized learning that remains useful without private source material.
 
-## Public/private boundary
+Real presentations may be used privately to improve the Studio, but only generalized and sanitized capabilities cross the public-promotion firewall. The public repository is built from a default-deny export and starts with clean Git history.
 
-This repository is intentionally **not** a mirror or fork of the private operational laboratory. It has a clean Git history.
+## Real-world application
 
-Real private presentations, screenshots, datasets, transcripts, source assets, operational evidence, private prompts, credentials, private URLs/endpoints, or attributable confidential logic do not belong here.
+The author's personal blog has been one of the real environments used to apply and refine Studio principles—from narrative direction and visual composition to rendered QA. This is evidence of iterative use, not a claim that the site was generated automatically in a single one-shot run.
 
-Material derived from private professional or personal work enters this repository only after the reusable capability has been generalized and sanitized. Uncertain provenance or sensitivity fails closed.
+## Repository map
 
-See `SECURITY.md` and `AGENTS.md` for the public-repository rules.
+- `skill/visual-presentation-studio/` — operational Agent Skill
+- `methodology/` — durable presentation contracts and reasoning
+- `quality/` — observable QA rules and severity criteria
+- `patterns/` — reusable positive and negative patterns
+- `templates/` — local-first technical/workspace starters
+- `examples/` — synthetic or sanitized acceptance evidence
 
-## Running the checks
+## Validation
+
+From the repository root:
 
 ```bash
 python -m unittest discover -s tests -v
 python scripts/validate_repo.py
 python scripts/public_safety_check.py .
+cd templates/exploratory-react && npm install && npm run build
 ```
 
-The exploratory React starter can be verified with:
+Automated success is necessary but not sufficient for a presentation itself: rendered visual inspection remains part of the Studio workflow.
 
-```bash
-cd templates/exploratory-react
-npm ci
-npm run build
-```
+## Public-safety boundary
 
-## Status
+Do not contribute private project source material, real confidential presentations, credentials, private endpoints, private personal data, or raw evidence copied from non-public work. Public examples must be intentionally public/rights-safe or synthetic; learnings from private work must be generalized and sanitized before they become repository content.
 
-**Active development.**
+See `SECURITY.md` and `AGENTS.md` before contributing.
 
-The repository represents a working public distribution of the Studio methodology and reusable implementation assets. It will continue evolving as new capabilities prove useful in real work and can be promoted safely.
+## Source visibility and rights
 
-## Rights
-
-This repository is source-public for portfolio and study purposes. No permissive open-source license is granted by default. A separate licensing decision may be made later.
+This repository is published for portfolio and study. Public visibility does **not** by itself grant an open-source license or additional reuse rights. If a license is added later, that file will define the applicable terms.

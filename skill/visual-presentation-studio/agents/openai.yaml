@@ -1,0 +1,4 @@
+interface:
+  display_name: "Visual Presentation Studio"
+  short_description: "Fábrica rigorosa de experiências visuais"
+  default_prompt: "Use $visual-presentation-studio para transformar este conteúdo em uma experiência visual de alto nível, seguindo pesquisa, aprovação, construção e inspeção renderizada."

@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Standalone 16:9 Presentation Starter</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --background: #11110f;
+      --surface: #1a1a17;
+      --foreground: #f4f0e8;
+      --muted: #a8a295;
+      --accent: #e7ff52;
+      --accent-ink: #17190c;
+      --display-font: Georgia, "Times New Roman", serif;
+      --body-font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --space: clamp(1rem, 2.1vw, 2.8rem);
+      --radius: 0.35rem;
+      --transition: 420ms cubic-bezier(.2,.75,.2,1);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body { min-height: 100%; }
+
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: #080807;
+      color: var(--foreground);
+      font-family: var(--body-font);
+    }
+
+    button { font: inherit; }
+
+    .presentation-shell {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: clamp(.45rem, 1.3vw, 1.25rem);
+    }
+
+    .stage {
+      position: relative;
+      width: min(calc(100vw - 1rem), calc((100vh - 1rem) * 16 / 9));
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      background:
+        linear-gradient(90deg, transparent 49.8%, rgba(255,255,255,.045) 50%, transparent 50.2%),
+        var(--background);
+      border: 1px solid rgba(244,240,232,.18);
+      box-shadow: 0 1.5rem 6rem rgba(0,0,0,.5);
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: var(--space);
+      padding: clamp(1.4rem, 4.3vw, 5.4rem);
+      background: var(--background);
+      animation: enter var(--transition) both;
+    }
+
+    .slide[hidden] { display: none; }
+
+    .slide::after {
+      content: "";
+      position: absolute;
+      width: clamp(8rem, 18vw, 22rem);
+      aspect-ratio: 1;
+      right: -5%;
+      bottom: -18%;
+      border: 1px solid rgba(231,255,82,.32);
+      transform: rotate(15deg);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      font-size: clamp(.62rem, .78vw, .9rem);
+      font-weight: 750;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 2.5rem;
+      height: 2px;
+      background: currentColor;
+    }
+
+    h1, h2 {
+      margin: auto 0 0;
+      max-width: 12ch;
+      font-family: var(--display-font);
+      font-weight: 400;
+      font-size: clamp(2rem, 5.2vw, 6.4rem);
+      line-height: .92;
+      letter-spacing: -.045em;
+    }
+
+    h2 { font-size: clamp(1.8rem, 4.3vw, 5.3rem); }
+
+    .lead {
+      align-self: end;
+      max-width: 31ch;
+      margin: 0 0 1.1rem;
+      color: var(--muted);
+      font-size: clamp(.9rem, 1.35vw, 1.55rem);
+      line-height: 1.5;
+    }
+
+    .signal {
+      align-self: center;
+      display: grid;
+      gap: clamp(.7rem, 1.2vw, 1.3rem);
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: signal;
+    }
+
+    .signal li {
+      counter-increment: signal;
+      display: grid;
+      grid-template-columns: 3rem 1fr;
+      gap: 1rem;
+      padding: 0 0 1rem;
+      border-bottom: 1px solid rgba(244,240,232,.2);
+      color: var(--muted);
+      font-size: clamp(.78rem, 1.05vw, 1.18rem);
+      line-height: 1.4;
+    }
+
+    .signal li::before {
+      content: "0" counter(signal);
+      color: var(--accent);
+      font-variant-numeric: tabular-nums;
+      font-weight: 700;
+    }
+
+    .metric {
+      align-self: center;
+      display: grid;
+      gap: 1rem;
+    }
+
+    .metric strong {
+      color: var(--accent);
+      font-family: var(--display-font);
+      font-size: clamp(4rem, 11vw, 12rem);
+      font-weight: 400;
+      line-height: .75;
+      letter-spacing: -.08em;
+    }
+
+    .metric span {
+      max-width: 23ch;
+      color: var(--muted);
+      font-size: clamp(.85rem, 1.1vw, 1.25rem);
+      line-height: 1.5;
+    }
+
+    .controls {
+      position: absolute;
+      z-index: 10;
+      right: clamp(.8rem, 2vw, 2rem);
+      bottom: clamp(.7rem, 1.6vw, 1.6rem);
+      display: flex;
+      align-items: center;
+      gap: .55rem;
+    }
+
+    .controls button {
+      width: clamp(2rem, 2.7vw, 2.8rem);
+      aspect-ratio: 1;
+      border: 1px solid rgba(244,240,232,.35);
+      border-radius: var(--radius);
+      background: transparent;
+      color: var(--foreground);
+      cursor: pointer;
+    }
+
+    .controls button:hover:not(:disabled),
+    .controls button:focus-visible {
+      border-color: var(--accent);
+      color: var(--accent);
+      outline: 2px solid transparent;
+    }
+
+    .controls button:disabled { opacity: .3; cursor: default; }
+
+    .counter {
+      min-width: 4.6rem;
+      text-align: center;
+      color: var(--muted);
+      font-size: clamp(.7rem, .85vw, .9rem);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .starter-note {
+      position: absolute;
+      z-index: 10;
+      left: clamp(.9rem, 2vw, 2rem);
+      bottom: clamp(.9rem, 1.8vw, 1.8rem);
+      color: rgba(244,240,232,.45);
+      font-size: clamp(.55rem, .68vw, .72rem);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    @keyframes enter {
+      from { opacity: 0; transform: translateY(1.2rem); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-aspect-ratio: 4 / 3) {
+      .slide { padding: clamp(1rem, 3.3vw, 2.5rem); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .001ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="presentation-shell" aria-label="Replaceable 16:9 presentation example">
+    <div class="stage">
+      <section class="slide" aria-label="Slide 1 of 3">
+        <div>
+          <p class="eyebrow">Replaceable example</p>
+          <h1>Design the argument before the interface.</h1>
+        </div>
+        <p class="lead">A technical starter should protect pacing, hierarchy, keyboard access, and local delivery—without deciding the story in advance.</p>
+      </section>
+
+      <section class="slide" aria-label="Slide 2 of 3" hidden>
+        <div>
+          <p class="eyebrow">Narrative sequence</p>
+          <h2>Three deliberate moves.</h2>
+        </div>
+        <ol class="signal" aria-label="Three steps">
+          <li>Establish what the audience must understand.</li>
+          <li>Use evidence and composition to make the shift visible.</li>
+          <li>End with the decision, implication, or next action.</li>
+        </ol>
+      </section>
+
+      <section class="slide" aria-label="Slide 3 of 3" hidden>
+        <div>
+          <p class="eyebrow">Release condition</p>
+          <h2>The first render begins review.</h2>
+        </div>
+        <div class="metric" aria-label="Zero known major issues required">
+          <strong>0</strong>
+          <span>known BLOCKER or MAJOR issues before the work is ready for user review.</span>
+        </div>
+      </section>
+
+      <p class="starter-note">Standalone 16:9 starter</p>
+      <nav class="controls" aria-label="Slide navigation">
+        <button id="previous" type="button" aria-label="Previous slide">←</button>
+        <span class="counter" id="counter" aria-live="polite">01 / 03</span>
+        <button id="next" type="button" aria-label="Next slide">→</button>
+      </nav>
+    </div>
+  </main>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const previous = document.querySelector('#previous');
+    const next = document.querySelector('#next');
+    const counter = document.querySelector('#counter');
+    let current = 0;
+
+    function showSlide(index) {
+      current = Math.max(0, Math.min(index, slides.length - 1));
+      slides.forEach((slide, position) => {
+        const active = position === current;
+        slide.hidden = !active;
+        slide.setAttribute('aria-hidden', String(!active));
+      });
+      counter.textContent = `${String(current + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
+      previous.disabled = current === 0;
+      next.disabled = current === slides.length - 1;
+    }
+
+    previous.addEventListener('click', () => showSlide(current - 1));
+    next.addEventListener('click', () => showSlide(current + 1));
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowLeft') showSlide(current - 1);
+      if (event.key === 'ArrowRight') showSlide(current + 1);
+    });
+
+    showSlide(0);
+  </script>
+</body>
+</html>

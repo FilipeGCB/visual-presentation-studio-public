@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Generic Acceptance — Review Loop</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #ece7db;
+      --ink: #111311;
+      --muted: #5f625c;
+      --blue: #2444d8;
+      --lime: #d9ff3f;
+      --line: rgba(17,19,17,.28);
+      --display: Georgia, "Times New Roman", serif;
+      --body: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --transition: 420ms cubic-bezier(.2,.75,.2,1);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { min-height: 100%; }
+
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: #171816;
+      color: var(--ink);
+      font-family: var(--body);
+    }
+
+    button { font: inherit; }
+
+    .shell {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: clamp(.4rem, 1vw, 1rem);
+    }
+
+    .stage {
+      position: relative;
+      width: min(calc(100vw - .8rem), calc((100vh - .8rem) * 16 / 9));
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      background: var(--paper);
+      border: 1px solid rgba(255,255,255,.18);
+      box-shadow: 0 2rem 7rem rgba(0,0,0,.48);
+    }
+
+    .screen {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: clamp(1.2rem, 3.5vw, 4rem);
+      padding: clamp(1.5rem, 4.7vw, 5.8rem);
+      background:
+        linear-gradient(var(--line) 1px, transparent 1px) 0 0 / 100% 25%,
+        var(--paper);
+      animation: arrive var(--transition) both;
+    }
+
+    .screen[hidden] { display: none; }
+
+    .copy { display: flex; flex-direction: column; }
+
+    .label {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      margin: 0;
+      color: var(--blue);
+      font-size: clamp(.58rem, .75vw, .82rem);
+      font-weight: 850;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+
+    .label::before { content: ""; width: 2.2rem; height: 2px; background: currentColor; }
+
+    h1, h2 {
+      margin: auto 0 .7rem;
+      max-width: 11ch;
+      font-family: var(--display);
+      font-size: clamp(2.4rem, 5.8vw, 7.1rem);
+      font-weight: 400;
+      line-height: .9;
+      letter-spacing: -.055em;
+    }
+
+    h2 { font-size: clamp(2.2rem, 4.8vw, 5.8rem); }
+
+    .subhead {
+      max-width: 33ch;
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(.78rem, 1.2vw, 1.25rem);
+      line-height: 1.5;
+    }
+
+    .first-render {
+      position: relative;
+      align-self: center;
+      min-height: 69%;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--ink);
+      transform: rotate(2.4deg);
+    }
+
+    .first-render::before,
+    .first-render::after {
+      content: "";
+      position: absolute;
+      width: 76%;
+      height: 2px;
+      background: var(--blue);
+      transform: rotate(44deg);
+    }
+
+    .first-render::after { transform: rotate(-44deg); }
+
+    .first-render strong {
+      z-index: 1;
+      display: grid;
+      place-items: center;
+      width: clamp(5rem, 9vw, 9rem);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: var(--lime);
+      font-family: var(--display);
+      font-size: clamp(2.5rem, 5vw, 5.8rem);
+      font-weight: 400;
+    }
+
+    .annotation {
+      position: absolute;
+      right: 5%;
+      top: 7%;
+      color: var(--blue);
+      font-size: clamp(.62rem, .78vw, .85rem);
+      font-weight: 800;
+      transform: rotate(-4deg);
+    }
+
+    .loop {
+      align-self: center;
+      display: grid;
+      gap: clamp(.65rem, 1.5vw, 1.4rem);
+      counter-reset: loop;
+    }
+
+    .loop-step {
+      counter-increment: loop;
+      display: grid;
+      grid-template-columns: clamp(2.7rem, 4vw, 4rem) 1fr auto;
+      gap: clamp(.7rem, 1.2vw, 1.2rem);
+      align-items: center;
+      padding: 0 0 clamp(.65rem, 1.4vw, 1.3rem);
+      border-bottom: 1px solid var(--ink);
+    }
+
+    .loop-step::before {
+      content: "0" counter(loop);
+      color: var(--blue);
+      font-weight: 850;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .loop-step strong { font-size: clamp(.9rem, 1.35vw, 1.35rem); }
+
+    .loop-step span {
+      max-width: 20ch;
+      color: var(--muted);
+      font-size: clamp(.66rem, .85vw, .9rem);
+      text-align: right;
+    }
+
+    .release {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: clamp(.5rem, 1.4vw, 1.4rem);
+      padding: clamp(.7rem, 1.1vw, 1rem);
+      background: var(--lime);
+      font-weight: 850;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      font-size: clamp(.63rem, .8vw, .84rem);
+    }
+
+    .controls {
+      position: absolute;
+      z-index: 5;
+      right: clamp(.8rem, 1.7vw, 1.6rem);
+      bottom: clamp(.7rem, 1.5vw, 1.4rem);
+      display: flex;
+      align-items: center;
+      gap: .45rem;
+    }
+
+    .controls button {
+      width: clamp(2rem, 2.7vw, 2.7rem);
+      aspect-ratio: 1;
+      border: 1px solid var(--ink);
+      background: var(--paper);
+      color: var(--ink);
+      cursor: pointer;
+    }
+
+    .controls button:hover:not(:disabled),
+    .controls button:focus-visible {
+      background: var(--blue);
+      color: white;
+      outline: 2px solid var(--lime);
+      outline-offset: 2px;
+    }
+
+    .controls button:disabled { opacity: .3; cursor: default; }
+    .counter { min-width: 3.2rem; text-align: center; font-size: .72rem; font-variant-numeric: tabular-nums; }
+
+    @keyframes arrive {
+      from { opacity: 0; transform: translateY(1.1rem); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .001ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell" aria-label="Generic acceptance presentation">
+    <div class="stage">
+      <section class="screen" aria-label="Screen 1 of 2">
+        <div class="copy">
+          <p class="label">The rework trap</p>
+          <h1>The first render is evidence—not delivery.</h1>
+          <p class="subhead">Treating build success as completion moves visual, narrative, and experience defects into the most expensive review moment.</p>
+        </div>
+        <div class="first-render" aria-label="First render marked for inspection">
+          <span class="annotation">inspect the real surface</span>
+          <strong>1</strong>
+        </div>
+      </section>
+
+      <section class="screen" aria-label="Screen 2 of 2" hidden>
+        <div class="copy">
+          <p class="label">The closed loop</p>
+          <h2>Find defects while correction is still cheap.</h2>
+          <p class="subhead">The loop ends only when corrections survive a new render and no known BLOCKER or MAJOR remains.</p>
+        </div>
+        <div class="loop" aria-label="Three-step review loop">
+          <div class="loop-step"><strong>Render</strong><span>Open the real implementation</span></div>
+          <div class="loop-step"><strong>Inspect</strong><span>Record observable issues and causes</span></div>
+          <div class="loop-step"><strong>Correct</strong><span>Fix, re-render, and revalidate</span></div>
+          <div class="release"><span>Release condition</span><span>0 BLOCKER · 0 MAJOR</span></div>
+        </div>
+      </section>
+
+      <nav class="controls" aria-label="Screen navigation">
+        <button id="previous" type="button" aria-label="Previous screen">←</button>
+        <span class="counter" id="counter" aria-live="polite">1 / 2</span>
+        <button id="next" type="button" aria-label="Next screen">→</button>
+      </nav>
+    </div>
+  </main>
+
+  <script>
+    const screens = Array.from(document.querySelectorAll('.screen'));
+    const previous = document.querySelector('#previous');
+    const next = document.querySelector('#next');
+    const counter = document.querySelector('#counter');
+    let current = 0;
+
+    function showScreen(index) {
+      current = Math.max(0, Math.min(index, screens.length - 1));
+      screens.forEach((screen, position) => {
+        const active = position === current;
+        screen.hidden = !active;
+        screen.setAttribute('aria-hidden', String(!active));
+      });
+      counter.textContent = `${current + 1} / ${screens.length}`;
+      previous.disabled = current === 0;
+      next.disabled = current === screens.length - 1;
+    }
+
+    previous.addEventListener('click', () => showScreen(current - 1));
+    next.addEventListener('click', () => showScreen(current + 1));
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowLeft') showScreen(current - 1);
+      if (event.key === 'ArrowRight') showScreen(current + 1);
+    });
+
+    showScreen(0);
+  </script>
+</body>
+</html>
