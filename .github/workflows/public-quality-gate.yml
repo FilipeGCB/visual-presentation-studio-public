@@ -1,0 +1,40 @@
+name: public-quality-gate
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run repository tests
+        run: python -m unittest discover -s tests -v
+
+      - name: Validate public repository contracts
+        run: python scripts/validate_repo.py
+
+      - name: Scan public tree for sensitive material
+        run: python scripts/public_safety_check.py .
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Build exploratory React starter
+        working-directory: templates/exploratory-react
+        run: |
+          npm install --no-audit --no-fund
+          npm run build
