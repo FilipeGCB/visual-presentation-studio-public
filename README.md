@@ -1,67 +1,65 @@
 # Visual Presentation Studio
 
-**Active development.** Visual Presentation Studio is a local-first engineering system for designing, building, rendering, inspecting, and validating high-quality HTML presentations and visual narratives with AI-assisted workflows.
+**Sistema local-first para projetar, construir, renderizar, inspecionar e validar apresentações e narrativas visuais de alta qualidade com workflows assistidos por IA.**
 
-This repository is the curated public distribution of an actively developed private laboratory. It contains reusable capability, not private presentation deliverables or raw project evidence.
+**EN:** A local-first engineering system for designing, building, rendering, inspecting, and validating high-quality AI-assisted presentations and visual narratives.
 
-## Why it exists
+[English version](README.en.md)
 
-A strong visual artifact is not just a model output. The Studio treats thesis, narrative, visual direction, assets, technical architecture, browser rendering, inspection, correction, and multidimensional QA as an engineering lifecycle.
+## Em 10 segundos
 
-The central principle is simple:
+O Visual Presentation Studio trata uma apresentação como um **produto de engenharia visual**, não como uma sequência de slides gerada por um modelo.
 
-> Complexity may vary. Production rigor does not.
+Ele organiza o ciclo completo: tese, narrativa, direção visual, assets, implementação, renderização real no navegador, inspeção, correção e QA antes de considerar uma entrega final.
 
-## Two-gate lifecycle
+> **Princípio central:** a complexidade pode variar; o rigor de produção não.
 
-`brief → proposal → Gate 1 → storyboard/specs → build → render/inspect/correct → QA → Gate 2 → FINAL → optional controlled learning`
+## Por que existe
 
-- **Gate 1** freezes thesis, primary narrative, format, visual direction, primary interaction, stack, and destination before implementation.
-- **Gate 2** approves the exact finished build only after rendered inspection and quality gates have no known BLOCKER or MAJOR issues.
+Geradores de apresentação podem produzir algo visualmente aceitável rapidamente, mas isso não garante coerência narrativa, qualidade de layout, legibilidade, comportamento responsivo ou consistência entre versões.
 
-## Supported experiences
+O Studio existe para separar **geração** de **validação** e transformar produção visual em um processo reproduzível e revisável.
 
-- Traditional / 16:9 presentations
-- Scrollytelling and editorial narratives
-- Exploratory / interactive experiences
-- Deliberate hybrids when they improve comprehension
+## Diferenciais
 
-Local downloadable delivery is a first-class output. HTML/CSS/JavaScript is preferred when sufficient; React is used when meaningful state or interaction warrants it.
+- ciclo de produção com **dois gates explícitos**;
+- renderização e inspeção do resultado real, não apenas validação de código;
+- QA separado em conteúdo, narrativa, visual, experiência e técnica;
+- suporte a apresentações 16:9, scrollytelling, experiências exploratórias e híbridos deliberados;
+- entrega local/downloadable como saída de primeira classe;
+- exemplos e metodologia públicos sanitizados, sem expor entregas privadas.
 
-## Quality system
+## Lifecycle
 
-The Studio separates build success from visual evidence. Its workflow requires the actual result to be rendered and inspected at relevant states and viewports, then corrected and rendered again.
+```text
+brief → proposta → Gate 1 → storyboard/specs → build → render/inspect/correct → QA → Gate 2 → FINAL → aprendizado controlado opcional
+```
 
-Quality is evaluated across content, narrative, visual, experience, and technical surfaces. Evidence records the exact build, route, viewport, input, settled state, and known limitations so reviewability does not depend on vague claims.
+- **Gate 1:** congela tese, narrativa principal, formato, direção visual, interação principal, stack e destino antes da implementação.
+- **Gate 2:** aprova o build exato somente depois de inspeção renderizada e ausência de issues conhecidas BLOCKER ou MAJOR.
 
-## Current trade-off
+## Estado atual
 
-The current production-quality route is optimized for **visual quality, reproducibility, and reviewability rather than minimum latency or token cost**. That discipline can produce highly consistent final artifacts, but it can also be slower and more expensive than lightweight generation during exploratory work.
+**Desenvolvimento ativo.** A rota de produção atual prioriza **qualidade visual, reprodutibilidade e reviewabilidade**, não latência mínima ou menor custo de tokens.
 
-A future research track may investigate a faster draft path while preserving the current production-quality route. A Fast/Draft mode is not presented here as an existing capability.
+Um caminho futuro pode explorar um modo rápido de rascunho, mas **Fast/Draft mode não é apresentado aqui como capacidade existente**.
 
-## What is public here
+## Como explorar
 
-This distribution is intentionally smaller and safer than the private laboratory. It contains reusable methodology, the operational Skill, templates, patterns, quality rules, generic examples, and sanitized learning that remains useful without private source material.
+O repositório público contém metodologia, skill operacional, patterns, templates, regras de qualidade, exemplos sintéticos/sanitizados e testes.
 
-Real presentations may be used privately to improve the Studio, but only generalized and sanitized capabilities cross the public-promotion firewall. The public repository is built from a default-deny export and starts with clean Git history.
+```text
+skill/visual-presentation-studio/   Skill operacional
+methodology/                        contratos e raciocínio duráveis
+quality/                            regras observáveis de QA
+patterns/                           padrões positivos e negativos
+templates/                          starters técnicos/local-first
+examples/                           evidências sintéticas ou sanitizadas
+```
 
-## Real-world application
+## Validação
 
-The author's personal blog has been one of the real environments used to apply and refine Studio principles—from narrative direction and visual composition to rendered QA. This is evidence of iterative use, not a claim that the site was generated automatically in a single one-shot run.
-
-## Repository map
-
-- `skill/visual-presentation-studio/` — operational Agent Skill
-- `methodology/` — durable presentation contracts and reasoning
-- `quality/` — observable QA rules and severity criteria
-- `patterns/` — reusable positive and negative patterns
-- `templates/` — local-first technical/workspace starters
-- `examples/` — synthetic or sanitized acceptance evidence
-
-## Validation
-
-From the repository root:
+A partir da raiz:
 
 ```bash
 python -m unittest discover -s tests -v
@@ -70,14 +68,24 @@ python scripts/public_safety_check.py .
 cd templates/exploratory-react && npm install && npm run build
 ```
 
-Automated success is necessary but not sufficient for a presentation itself: rendered visual inspection remains part of the Studio workflow.
+Sucesso automatizado é necessário, mas não suficiente: a apresentação final continua exigindo **inspeção visual renderizada**.
 
-## Public-safety boundary
+## O que é público aqui
 
-Do not contribute private project source material, real confidential presentations, credentials, private endpoints, private personal data, or raw evidence copied from non-public work. Public examples must be intentionally public/rights-safe or synthetic; learnings from private work must be generalized and sanitized before they become repository content.
+Esta distribuição é propositalmente menor e mais segura que o laboratório privado. Ela contém capacidade reutilizável e documentação generalizada, não apresentações reais confidenciais, material bruto de projeto ou evidência operacional privada.
 
-See `SECURITY.md` and `AGENTS.md` before contributing.
+Aprendizados provenientes de trabalho privado só entram aqui quando podem ser generalizados e sanitizados de forma segura.
 
-## Source visibility and rights
+## Aplicação real
 
-This repository is published for portfolio and study. Public visibility does **not** by itself grant an open-source license or additional reuse rights. If a license is added later, that file will define the applicable terms.
+O blog pessoal do autor é um dos ambientes reais usados para aplicar e refinar princípios do Studio — da direção narrativa e composição visual ao QA renderizado. Isso demonstra uso iterativo, não geração one-shot automática do site inteiro.
+
+## Limites
+
+Este repositório não promete geração instantânea perfeita, não substitui revisão editorial/visual e não publica o laboratório privado completo.
+
+Veja também `SECURITY.md` e `AGENTS.md` antes de contribuir.
+
+## Direitos de uso
+
+Este repositório é público para portfólio e estudo. Visibilidade pública **não concede automaticamente uma licença open source**. Se uma licença for adicionada no futuro, o arquivo correspondente definirá os termos aplicáveis.
